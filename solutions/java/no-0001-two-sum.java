@@ -34,14 +34,17 @@
 // @code-start
 public class Solution {
     public int[] twoSum(int[] nums, int target) {
-        for (int i = 0; i < nums.length + 1; i++) {
-            for (int j = i + 1; j < nums.length; j++) {
-                int val = target - nums[i];
-                if (val == nums[j])
-                    return new int[]{i, j};
-            }
-        }
-        return null;
+		Map<Integer, Integer> m = new HashMap<>();
+		for(int i = 0; i < nums.length; i++) {
+			m.put(nums[i], i);
+		}
+		for(int i = 0; i < nums.length; i++) {
+			int v = target - nums[i];
+			if(m.containsKey(v) && m.get(v) != i) {
+				return new int[] {i, m.get(v)};
+			}
+		}
+		return null;
     }
 }
 // @code-end
