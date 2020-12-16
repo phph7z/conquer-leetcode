@@ -38,18 +38,40 @@
 // @code-start
 class Solution {
     public int lengthOfLongestSubstring(String s) {
-        int n = s.length();
-        Map<Character,Integer> map = new HashMap<>();
-        int ret = 0;
-        for(int start = 0, end = 0; end < n; end++) {
-            char ch = s.charAt(end);
-            if(map.containsKey(ch)) {
-                start = Math.max(map.get(ch) + 1, start);
-            }
-            ret = Math.max(ret, end - start + 1);
-            map.put(ch, end);
-        }
-        return ret;
+		if(s.length() == 0)
+			return 0;
+
+		Map<Character, Integer> map = new HashMap<>();
+		int left = 0;
+		int right = 0;
+		int len = Integer.MIN_VALUE;
+		while(right < s.length()) {
+			char rch = s.charAt(right);
+			putch(map, rch);
+			right ++;
+			while(map.get(rch) > 1) {
+				char lch = s.charAt(left);
+				removech(map, lch);
+				left ++;
+			}
+			len = Math.max(right - left, len);
+		}
+		return len;
     }
+
+	private void putch(Map<Character, Integer> m, char ch) {
+		if(m.containsKey(ch)) {
+			m.put(ch, m.get(ch) + 1);
+		} else {
+			m.put(ch, 1);
+		}
+	}
+
+	private void removech(Map<Character, Integer> m, char ch) {
+		if(m.containsKey(ch)) {
+			int v = m.get(ch) - 1;
+			m.put(ch, v);
+		}
+	}
 }
 // @code-end
