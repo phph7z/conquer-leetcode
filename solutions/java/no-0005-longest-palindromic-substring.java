@@ -41,24 +41,25 @@ class Solution {
         
         int len = s.length();
         boolean[][] dp = new boolean[len][len];
-        
-        // initial state
-        int start = 0;
-        int end = 0;
-        int maxLen = 1;
-        for(int r = 1; r < len; r++) {
-            for(int l = 0; l < r; l++) {
-                if(s.charAt(l) == s.charAt(r) && (r - l <= 2 || dp[l + 1][r - 1])) {
-                    dp[l][r] = true;
-                    if(r - l + 1 > maxLen) {
-                        maxLen = r - l + 1;
-                        start = l;
-                        end = r;
-                    }
-                }
-            }
-        }
-        return s.substring(start, end + 1);
+
+		int start = 0;
+		int end = 0;
+		int maxLen = 0;
+		for(int i = 0; i < len; i++) {
+			for(int j = 0; j <= i; j++) {
+				if(s.charAt(i) == s.charAt(j)) {
+					if(i - j <= 2 || dp[i - 1][j + 1]) {
+						dp[i][j] = true;
+						if(i - j > maxLen) {
+							maxLen = i - j;
+							start = j;
+							end = i;
+						}
+					}
+				}
+			}
+		}
+		return s.substring(start, end + 1);
     }
 }
 // @code-end
