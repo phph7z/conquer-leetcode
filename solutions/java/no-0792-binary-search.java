@@ -33,7 +33,7 @@ class Solution {
 		int left = 0;
 		int right = nums.length - 1;
 		while(left <= right) {
-			int m = (left + right) / 2;
+			int m = left + (right - left) / 2;
 			int n = nums[m];
 			if(n == target) {
 				return m;

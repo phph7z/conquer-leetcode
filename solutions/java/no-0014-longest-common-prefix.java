@@ -27,32 +27,26 @@
 // @code-start
 class Solution {
     public String longestCommonPrefix(String[] strs) {
-        if(strs == null || strs.length == 0) {
-            return "";
-        }
-        
-        int l = 0;
-        int r = strs.length - 1;
-        return findPrefix(strs, l, r);
+		if(strs == null || strs.length == 0) {
+			return "";
+		}
+		return findLcp(strs, 0, strs.length - 1);
     }
-    
-    private String findPrefix(String[] strs, int left, int right) {
-        
-        if(left == right) {
-            return strs[left];
-        } else {
-            int mid = (left + right) / 2;
-            String lcpLeft = findPrefix(strs, left, mid);
-            String lcpRight = findPrefix(strs, mid + 1, right);
-            
-            int min = Math.min(lcpLeft.length(), lcpRight.length());
-            for(int i = 0; i < min; i++) {
-                if(lcpLeft.charAt(i) != lcpRight.charAt(i)) {
-                    return lcpLeft.substring(0, i);
-                }
-            }
-            return lcpLeft.substring(0, min);
-        }
-    }
+
+	private String findLcp(String[] strs, int start, int end) {
+		if(start == end) {
+			return strs[start];
+		}
+		int mid = (start + end) / 2;
+		String leftLcp = findLcp(strs, start, mid);
+		String rightLcp = findLcp(strs, mid + 1, end);
+		int len = Math.min(leftLcp.length(), rightLcp.length());
+		for(int i = 0; i < len; i ++) {
+			if(leftLcp.charAt(i) != rightLcp.charAt(i)) {
+				return leftLcp.substring(0, i);
+			}
+		}
+		return leftLcp.substring(0, len);
+	}
 }
 // @code-end
