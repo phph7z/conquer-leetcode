@@ -35,27 +35,28 @@
 // @code-start
 class Solution {
     public String longestPalindrome(String s) {
-        if(s == null || s.length() < 2) {
-            return s;
-        }
-        
-        int len = s.length();
-        boolean[][] dp = new boolean[len][len];
-
+		int n = s.length();
+		if(n < 2) {
+			return s;
+		}
+		boolean[][] dp = new boolean[n][n];
+		// base case
+		for(int i = 0; i < n; i++) {
+			dp[i][i] = true;
+		}
 		int start = 0;
 		int end = 0;
 		int maxLen = 0;
-		for(int i = 0; i < len; i++) {
-			for(int j = 0; j <= i; j++) {
+		for(int i = n - 1; i >= 0; i --) {
+			for(int j = i; j < n; j ++) {
 				if(s.charAt(i) == s.charAt(j)) {
-					if(i - j <= 2 || dp[i - 1][j + 1]) {
-						dp[i][j] = true;
-						if(i - j > maxLen) {
-							maxLen = i - j;
-							start = j;
-							end = i;
-						}
-					}
+					dp[i][j] = i == j || i + 1 == j || dp[i + 1][j - 1];
+				}
+				int len = j - i + 1;
+				if(dp[i][j] && len > maxLen) {
+					start = i;
+					end = j;
+					maxLen = len;
 				}
 			}
 		}
