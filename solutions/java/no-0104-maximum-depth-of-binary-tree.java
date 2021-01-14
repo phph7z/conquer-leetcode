@@ -50,15 +50,12 @@
  */
 class Solution {
     public int maxDepth(TreeNode root) {
-		return traverse(root, 0);
+		if(root==null) return 0;
+		if(root.left==null && root.right==null) return 1;
+		int max = Integer.MIN_VALUE;
+		if(root.left!=null) max = Math.max(maxDepth(root.left), max);
+		if(root.right!=null) max = Math.max(maxDepth(root.right), max);
+		return max+1;
     }
-
-	private int traverse(TreeNode node, int depth) {
-		if(node == null) {
-			return depth;
-		} else {
-			return Math.max(traverse(node.left, depth + 1), traverse(node.right, depth + 1));
-		}
-	}
 }
 // @code-end

@@ -51,15 +51,25 @@
 // @code-start
 class Solution {
     public boolean isMatch(String s, String p) {
-		if(p.length() == 0) {
-			return s.length() == 0;
-		}
-		boolean firstMatch = s.length() > 0 && (p.charAt(0) == s.charAt(0) || p.charAt(0) == '.');
-		if(p.length() >= 2 && p.charAt(1) == '*') {
-			return isMatch(s, p.substring(2)) || firstMatch && isMatch(s.substring(1), p);
-		} else {
-			return firstMatch && isMatch(s.substring(1), p.substring(1));
-		}
+		Map<String,Boolean> memo = new HashMap<>();
+		return isMatch(s, 0, p, 0, memo);
     }
+
+	private boolean isMatch(String s, int i , String p, int j, Map<String,Boolean> memo) {
+		if(p.length() == j) return s.length() == i;
+		String key = i + "_" + j;
+		if(memo.containsKey(key)) {
+			return memo.get(key);
+		}
+		boolean ans = false;
+		boolean firstMatch = i<s.length() && (s.charAt(i)==p.charAt(j) || p.charAt(j)=='.');
+		if(j<p.length()-1 && p.charAt(j+1)=='*') {
+			ans = isMatch(s, i, p, j+2, memo) || firstMatch && isMatch(s, i+1, p, j, memo);
+		} else {
+			ans = firstMatch && isMatch(s, i+1, p, j+1, memo);
+		}
+		memo.put(key, ans);
+		return ans;
+	}
 }
 // @code-end
