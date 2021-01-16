@@ -9,7 +9,10 @@
 // Input: nums = []
 // Output: []
 // Example 3:
-// Input: nums = [0] Output: []  
+// Input: nums = [0]
+// Output: []
+// 
+//  
 // Constraints:
 // 
 // 0 <= nums.length <= 3000
@@ -21,50 +24,43 @@
 
 // @code-start
 class Solution {
-
-	private List<List<Integer>> ret = new ArrayList<>();
-
     public List<List<Integer>> threeSum(int[] nums) {
+		List<List<Integer>> ret = new ArrayList<>();
+		if(nums == null || nums.length == 0) return ret;
 		Arrays.sort(nums);
-		int len = nums.length;
-		int i = 0;
-		while(i < len - 1) {
+		for(int i = 0; i < nums.length; i++) {
 			int v = nums[i];
-			int target = 0 - v;
-			List<List<Integer>> pairList = getTwoSum(nums, i + 1, len - 1, target);
-			if(!pairList.isEmpty()) {
-				for(List<Integer> pair : pairList) {
-					pair.add(0, v);
-					ret.add(pair);
-				}
+			List<List<Integer>> pairs = twoSum(nums, i+1, 0-v);
+			for(List<Integer> pair : pairs) {
+				pair.add(v);
+				ret.add(pair);
 			}
-			while(i < len - 1 && nums[i] == v) i ++;
+			while(i<nums.length-1&&nums[i]==nums[i+1]) i++;
 		}
 		return ret;
     }
 
-	private List<List<Integer>> getTwoSum(int[] nums, int start, int end, int target) {
-		List<List<Integer>> retList = new ArrayList<>();
-		int l = start;
-		int r = end;
-		while(l < r) {
-			int lv = nums[l];
-			int rv = nums[r];
-			int sum = lv + rv;
-			if(sum > target) {
-				while(l < r && nums[r] == rv) r --;
-			} else if(sum < target) {
-				while(l < r && nums[l] == lv) l ++;
+	private List<List<Integer>> twoSum(int[] nums, int i, int target) {
+		List<List<Integer>> ret = new ArrayList<>();
+		int start = i; int end = nums.length - 1;
+		while(start < end) {
+			int left = nums[start];
+			int right = nums[end];
+			int sum = left + right;
+			if(sum < target) {
+				while(start<end && nums[start]==left) start++;
+			} else if(sum > target) {
+				while(start<end && nums[end]==right) end--;
 			} else {
 				List<Integer> pair = new ArrayList<>();
-				pair.add(lv);
-				pair.add(rv);
-				retList.add(pair);
-				while(l < r && nums[r] == rv) r --;
-				while(l < r && nums[l] == lv) l ++;
+				pair.add(nums[start]);
+				pair.add(nums[end]);
+				ret.add(pair);
+				while(start<end && nums[start]==left) start++;
+				while(start<end && nums[end]==right) end--;
 			}
 		}
-		return retList;
+		return ret;
 	}
 }
 // @code-end

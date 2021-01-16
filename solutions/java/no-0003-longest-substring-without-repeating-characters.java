@@ -38,40 +38,26 @@
 // @code-start
 class Solution {
     public int lengthOfLongestSubstring(String s) {
-		if(s.length() == 0)
-			return 0;
-
-		Map<Character, Integer> map = new HashMap<>();
-		int left = 0;
-		int right = 0;
-		int len = Integer.MIN_VALUE;
-		while(right < s.length()) {
-			char rch = s.charAt(right);
-			putch(map, rch);
-			right ++;
-			while(map.get(rch) > 1) {
-				char lch = s.charAt(left);
-				removech(map, lch);
-				left ++;
+		if(s==null ||s.length() ==0) return 0;
+		Map<Character,Integer> memo = new HashMap<>();
+		int len = 1;
+		int slow =0;
+		int i = 0;
+		for(; i < s.length();i++) {
+			if(memo.containsKey(s.charAt(i))) {
+				if(i-slow>len) {
+					len=i-slow;
+				}
+				if(memo.get(s.charAt(i)) >= slow) {
+					slow=memo.get(s.charAt(i))+1;
+				}
 			}
-			len = Math.max(right - left, len);
+			memo.put(s.charAt(i), i);
+		}
+		if(i-slow>len) {
+			len = i-slow;
 		}
 		return len;
     }
-
-	private void putch(Map<Character, Integer> m, char ch) {
-		if(m.containsKey(ch)) {
-			m.put(ch, m.get(ch) + 1);
-		} else {
-			m.put(ch, 1);
-		}
-	}
-
-	private void removech(Map<Character, Integer> m, char ch) {
-		if(m.containsKey(ch)) {
-			int v = m.get(ch) - 1;
-			m.put(ch, v);
-		}
-	}
 }
 // @code-end

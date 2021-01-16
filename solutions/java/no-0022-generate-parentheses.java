@@ -21,26 +21,20 @@
 class Solution {
 	private List<String> ans = new ArrayList<>();
     public List<String> generateParenthesis(int n) {
-		backtrack(0, n, n, new char[2 * n]);
+		backtrack(n, n, 0, new char[n*2]);
 		return ans;
     }
 
-	private void backtrack(int index, int lc, int rc, char[] path) {
-		if(lc == 0 && rc == 0) {
+	private void backtrack(int left, int right, int i, char[] path) {
+		if(left > right || left < 0 || right < 0) return;
+		if(left==right && left ==0) {
 			ans.add(new String(path));
 			return;
 		}
-		if(index == path.length)
-			return;
-		if(lc < rc) {
-			path[index] = '(';
-			backtrack(index + 1, lc - 1, rc, path);
-			path[index] = ')';
-			backtrack(index + 1, lc, rc - 1, path);
-		} else if(lc == rc) {
-			path[index] = '(';
-			backtrack(index + 1, lc - 1, rc, path);
-		}
+		path[i] = '(';
+		backtrack(left-1, right, i+1, path);
+		path[i] = ')';
+		backtrack(left, right-1, i+1, path);
 	}
 }
 // @code-end

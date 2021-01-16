@@ -29,19 +29,17 @@
 // @code-start
 class Solution {
     public int rob(int[] nums) {
+		if(nums == null || nums.length == 0) return 0;
 		int[] memo = new int[nums.length];
 		Arrays.fill(memo, -1);
 		return dp(nums, 0, memo);
     }
 
-	private int dp(int[] nums, int start, int[] memo) {
-		if(start >= nums.length)
-			return 0;
-		if(memo[start] != -1) 
-			return memo[start];
-		int ans = Math.max(dp(nums, start + 2, memo) + nums[start], dp(nums, start + 1, memo));
-		memo[start] = ans;
-		return ans;
+	private int dp(int[] nums, int i, int[] memo) {
+		if(i >= nums.length) return 0;
+		if(memo[i]!=-1) return memo[i];
+		memo[i] = Math.max(nums[i] + dp(nums, i+2, memo), dp(nums, i+1, memo));
+		return memo[i];
 	}
 }
 // @code-end

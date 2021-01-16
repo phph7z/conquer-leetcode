@@ -23,56 +23,52 @@
 // @code-start
 class Solution {
     public List<List<Integer>> fourSum(int[] nums, int target) {
-		Arrays.sort(nums);
 		List<List<Integer>> ret = new ArrayList<>();
-
-		int i = 0;
-		while(i < nums.length - 1) {
-			int v = nums[i];
-			List<List<Integer>> list = threeSum(nums, i + 1, nums.length - 1, target - v);
-			for(List<Integer> l : list) {
-				l.add(0, v);
-				ret.add(l);
+		if(nums == null || nums.length < 4) return ret;
+		Arrays.sort(nums);
+		for(int i=0; i<nums.length;i++) {
+			List<List<Integer>> groups = threeSum(nums, i+1, target-nums[i]);
+			for(List<Integer> group : groups) {
+				group.add(nums[i]);
+				ret.add(group);
 			}
-			while(i < nums.length - 1 && nums[i] == v) i++;
+			while(i<nums.length-1&&nums[i]==nums[i+1]) i++;
 		}
 		return ret;
     }
 
-	private List<List<Integer>> threeSum(int[] nums, int start, int end, int target) {
+	private List<List<Integer>> threeSum(int[] nums, int start, int target) {
 		List<List<Integer>> ret = new ArrayList<>();
-		int i = start;
-		while(i < end) {
-			int v = nums[i];
-			List<List<Integer>> list = twoSum(nums, i + 1, end, target - v);
-			for(List<Integer> l : list) {
-				l.add(0, v);
-				ret.add(l);
+		for(int i=start; i<nums.length;i++) {
+			List<List<Integer>> groups = twoSum(nums, i+1, target-nums[i]);
+			for(List<Integer> group : groups) {
+				group.add(nums[i]);
+				ret.add(group);
 			}
-			while(i < end && nums[i] == v) i ++;
+			while(i<nums.length-1&&nums[i]==nums[i+1]) i++;
 		}
 		return ret;
 	}
 
-	private List<List<Integer>> twoSum(int[] nums, int start, int end, int target) {
+	private List<List<Integer>> twoSum(int[] nums, int start, int target) {
 		List<List<Integer>> ret = new ArrayList<>();
-		int l = start;
-		int r = end;
-		while(l < r) {
-			int lv = nums[l];
-			int rv = nums[r];
-			int sum = lv + rv;
-			if(sum > target) {
-				while(l < r && nums[r] == rv) r--;
+		int lo = start;
+		int hi = nums.length - 1;
+		while(lo < hi) {
+			int left = nums[lo];
+			int right = nums[hi];
+			int sum = left + right;
+			if(sum == target) {
+				List<Integer> group = new ArrayList<>();
+				group.add(nums[lo]);
+				group.add(nums[hi]);
+				ret.add(group);
+				while(lo<hi && nums[lo]==left) lo++;
+				while(lo<hi && nums[hi]==right) hi--;
+			} else if(sum > target) {
+				while(lo<hi && nums[hi]==right) hi--;
 			} else if(sum < target) {
-				while(l < r && nums[l] == lv) l++;
-			} else {
-				List<Integer> list = new ArrayList<>();
-				list.add(lv);
-				list.add(rv);
-				ret.add(list);
-				while(l < r && nums[l] == lv) l++;
-				while(l < r && nums[r] == rv) r--;
+				while(lo<hi && nums[lo]==left) lo++;
 			}
 		}
 		return ret;

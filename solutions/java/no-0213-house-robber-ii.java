@@ -33,26 +33,23 @@
 // @code-start
 class Solution {
     public int rob(int[] nums) {
+		if(nums==null) return 0;
 		int n = nums.length;
-		if(n == 0) return 0;
-		if(n == 1) return nums[0];
-		Map<Integer,Integer> memo = new HashMap<>();
-		int v1 = dp(nums, 0, 0, n - 1, memo);
-		memo.clear();
-		int v2 = dp(nums, 1, 1, n, memo);
+		if(n==0) return 0;
+		if(n==1) return nums[0];
+		int[] memo = new int[nums.length];
+		Arrays.fill(memo, -1);
+		int v1 = dp(nums, 0, nums.length-2, 0, memo);
+		Arrays.fill(memo, -1);
+		int v2 = dp(nums, 1, nums.length-1, 1, memo);
 		return Math.max(v1, v2);
     }
 
-	private int dp(int[] nums, int index, int start, int end, Map<Integer,Integer> memo) {
-		if(index < start || index >= end) {
-			return 0;
-		}
-		if(memo.containsKey(index)) {
-			return memo.get(index);
-		}
-		int ans = Math.max(dp(nums, index + 2, start, end, memo) + nums[index], dp(nums, index + 1, start, end, memo));
-		memo.put(index, ans);
-		return ans;
+	private int dp(int[] nums, int start, int end, int i, int[] memo) {
+		if(i>end) return 0;
+		if(memo[i]!=-1) return memo[i];
+		memo[i] = Math.max(dp(nums, start, end, i+1, memo), nums[i]+dp(nums, start, end, i+2, memo));
+		return memo[i];
 	}
 }
 // @code-end
